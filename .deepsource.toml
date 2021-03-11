@@ -1,0 +1,19 @@
+version = 1
+
+exclude_patterns = [
+    ".circleci/",
+    "travis.yml"
+]
+
+[[analyzers]]
+name = "javascript"
+enabled = true
+
+  [analyzers.meta]
+  environment = [
+    "mocha",
+    "browser",
+    "nodejs"
+  ]
+  plugins = ["react"]
+  dialect = "typescript"
