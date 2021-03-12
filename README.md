@@ -4,10 +4,6 @@ An end-to-end integration test example for a React SPA, using ASP .NET Boilerpla
 
 Example project: https://github.com/olivierbouchomsfontys/AutomaticAcceptanceTest
 
-Designed to work with [CircleCI](https://circleci.com/gh/anishkny/realworld-e2e-test) and [Travis CI](https://travis-ci.org/anishkny/realworld-e2e-test).
-
-Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com)
-
 ## Getting Started
 
 ### Prerequisites
