@@ -1,6 +1,6 @@
 # RealWorld End-to-End Integration Testing
 
-An end-to-end integration test example for a React SPA, using ASP .NET Boilerplate 6.0. Using Mocha to drive a headless Chrome via Puppeteer.
+An end-to-end integration test example for a React SPA, using ASP .NET Boilerplate 6.0. Using Protractor to drive Chrome and Firefox.
 
 Example project: https://github.com/olivierbouchomsfontys/AutomaticAcceptanceTest
 
@@ -12,9 +12,17 @@ Example project: https://github.com/olivierbouchomsfontys/AutomaticAcceptanceTes
 Docker
 Node 
 .NET 5
+Chrome
+Firefox
 ```
 
 ### Installing
+
+```
+npm install -g protractor
+webdriver-manager update
+webdriver-manager start
+```
 
 Clone example project:
 

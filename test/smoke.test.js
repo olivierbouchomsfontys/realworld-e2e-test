@@ -1,71 +1,35 @@
-const puppeteer = require('puppeteer');
-const expect = require('chai').expect;
+const protractor = require('protractor');
 
-let browser = null;
-let page = null;
+const by = protractor.by;
+const element = protractor.element;
+const browser = protractor.browser;
+const until = protractor.ExpectedConditions;
 
-const baseUrl = 'http://localhost:3000';
+const assert = console.assert;
 
-before(async () => {
-    const launchOptions = {headless: false};
+describe('ABP Demo App', function () {
+    it('Test logging in with valid credentials', async () => {
+        await browser.get('http://localhost:3000');
+        await browser.waitForReact();
 
-    if (process.env.LAUNCH_CHROME_NO_SANDBOX) {
-        Object.assign(launchOptions, {args: ['--no-sandbox']});
-    }
+        const emailInput = element(by.id('userNameOrEmailAddress'));
+        const passwordInput = element(by.id('password'));
+        const button = element(by.cssContainingText('button[type="submit"]', 'Log in'));
 
-    browser = await puppeteer.launch(launchOptions);
-    page = await browser.newPage();
-});
+        // Wait for page load
+        browser.wait(until.presenceOf(emailInput), 5000, 'error')
 
-after(async () => {
-    await browser.close();
-});
+        await emailInput.sendKeys('admin')
+        await passwordInput.sendKeys('123qwe');
+        await button.click();
 
-it('Show validation errors when logging in without any credentials', async () => {
-    // Page load
-    await page.goto(baseUrl);
-    await page.waitForSelector('#userNameOrEmailAddress');
+        const content = element(by.css('.ant-layout-content'));
 
-    await page.click('button[type="submit"]');
-    await page.waitForSelector('div[role="alert"]');
+        // Wait for page load
+        browser.wait(until.presenceOf(content), 5000, 'error')
 
-    const validationMessages = await page.$$('div[role="alert"]');
-    expect(validationMessages.length).to.equal(2);
+        const title = await browser.getTitle();
 
-    const validatorText = await page.evaluate((validationMessage) => {
-        return validationMessage.innerText;
-    }, validationMessages[0]);
-
-    expect(validatorText).to.equal('This field is required');
-});
-
-it('Show popup when logging in with invalid credentials', async () => {
-    await page.goto(baseUrl);
-    await page.waitForSelector('#userNameOrEmailAddress');
-
-    await page.type('#userNameOrEmailAddress', 'admin', {delay: 50});
-    await page.type('#password', 'wrong', {delay: 50});
-    await page.click('button[type="submit"]');
-    await page.waitForSelector('.ant-modal-content');
-    await expect('.ant-modal-content').to.be.ok;
-    await page.click('.ant-btn-primary');
-    const dialog = await page.evaluate(async () => {
-        return document.querySelector('.ant-modal-content')
+        assert(title === 'Dashboard | AppName');
     });
-
-    expect(dialog == null).to.be.ok;
-});
-
-it('Redirect when logging in with correct credentials', async () => {
-    await page.goto(baseUrl);
-    await page.waitForSelector('#userNameOrEmailAddress');
-
-    await page.type('#userNameOrEmailAddress', 'admin', {delay: 50});
-    await page.type('#password', '123qwe', {delay: 50});
-
-    await page.click('button[type="submit"]');
-
-    await page.waitForSelector('.ant-layout-content');
-
-    expect(page.url()).to.equal('http://localhost:3000/dashboard')
 })
