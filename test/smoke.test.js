@@ -40,7 +40,6 @@ it('Show validation errors when logging in without any credentials', async () =>
 });
 
 it('Show popup when logging in with invalid credentials', async () => {
-    //Page load
     await page.goto(baseUrl);
     await page.waitForSelector('#userNameOrEmailAddress');
 
@@ -65,8 +64,6 @@ it('Redirect when logging in with correct credentials', async () => {
     await page.type('#password', '123qwe', {delay: 50});
 
     await page.click('button[type="submit"]');
-
-    // await page.waitForSelector();
 
     await page.waitForSelector('.ant-layout-content');
 
